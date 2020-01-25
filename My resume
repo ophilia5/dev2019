@@ -1,0 +1,80 @@
+
+
+OPHILIA MULUKOH
+mulukohophiliawa@gmail.com
+29 Highland Blvd APT E New Castle, Delaware 19720 330-780-4362
+
+
+
+ DevOps /Red hat certified Linux systems Administrator
+ OBJECTIVE
+I am a Red hat certified  Systems Administrator  (RHCSA)  with three (3) years of experience,  hands on systems administration and DevOps methodology.  Enthusiastic team player, always looking for innovative and efficient engineering solutions, Energetic self-starter capable of learning quickly with minimal guidance.  Seeking to progress my career in the Information Technology sector where I will use my skills and experience in system maintenance and technical troubleshooting to contribute to an active growth and productivity of the company.
+
+SKILLS AND ABILITIES
+	Users and group management
+	Up to date knowledge of emerging  tools and technologies
+	Can perform successfully in both team and independent work environment
+	Prioritizing tasks in a high pressure environment
+	Users and group management
+	Process management
+	System configuration and hardening
+	Strong ability to troubleshoot any issues  generated while building and deploying
+	Team player with excellent interpersonal skills. Self-motivated, dedicated and understanding the demands of 24/7 system maintenance and has good customer support experience.
+	Ability to work closely with teams, in order to ensure high quality and timely delivery of builds and releases.
+	Version control system:  Git, Github and Bitbucket
+	Continuous integration using Jenkins and Nexus
+	Automation deployment: Ansible
+	Continuous monitoring: splunk
+	Upgrade and patching
+	Webserver (apache) troubleshooting (access  and error log) 
+	 Knowledge on bash scripting
+	Ability to handle confidential information in a professional manner
+
+	Storage: file systems  and LVM
+	Ticketing system:  Jira/Kanban  Board/confluence  
+
+WORK EXPERIENCE
+Jr DevOps/system admin, 08/2017 to Current
+Data Service Group Inc. – Bear, DE
+	Working with Dev team, making modifications on the code using Git VCS to clone, add, commit and push codes from local and master branches to central repositories.
+	Collaborating with Dev and Prod teams to ensure smooth running of the pipeline.
+	Verify and troubleshoot failed maven builds on Jenkins, verifying artifact id, and date stamps on Nexus, troubleshoot, document and communicate failed builds to the Dev team.
+	Deploy snapshots of application codes to Dev and SIT/QA environments using playbooks Lamp roles.
+	Participate in daily scrum to improve system performance, and automation capabilities.
+	Searching and testing open source applications and software to integrate into the infrastructure.
+	Creating documentation resources to aid in future troubleshooting issues, to interact with users and business partners to design solutions for current and future business problems including cloud Migration solutions.
+	Monitor system infrastructure against zero downtime, perform periodic backups, and troubleshoot failures.
+	Diagnose application memory leaks, identify and fix issues related to SElinux, and identify library dependencies for third party software.
+	Collaborate with business partners to perform software enhancing testing and scans.
+	Creating new Ansible YAML, Play-books, Roles and bash shell scripts for application deployments.
+	Resolve package Management dependency issues.
+	Experience with virtualization (VMWare)
+	Using SPlunk to monitor overall server performance, log management and communicating log messages to appropriate teams in different environments within the organization.
+	Installation, configuration and hardening of Linux systems, working with security team on future patching needs.
+	Installation,  Configuration and troubleshooting of the APACHE web Server on Linux platforms 
+
+Linux Systems Administrator, 02/2015 to 12/2016
+9 Solutions– Hyattsville, MD
+
+	Creating and managing users and group accounts, managing users security, setting up users and group permission, password recovery, aging and complexity, regulating access to System  resources and file system by configuring  Access Control  list (ACL)
+	Vulnerability assessments, performing upgrades and Patching.
+	Managing physical, virtual, and network storage (HD, LVM, SAMBA, and NAS).
+	Perform installation, configuration, monitoring and troubleshooting of LAMP.
+	Analyzing and interpreting system and application log files.
+	Configuring SElinux 
+	Configuration and management of network services (HTTP, NFS, SCP NTP).
+	Troubleshoot boot issues, identify and resolve service failures affecting boot.
+	Resolve package management dependency issues.
+	Collect system information to aid in troubleshooting, document resources, monitor for any behavior
+	Configure Rsyslog to send log messages to a system centralized host.
+	Installation, configuration, and Hardening of Linux servers.
+	Performing periodic system updates/Patches.
+
+EDUCATION
+ 	University of Yaounde 1 – Dschang :     Bachelor in psychology 
+ 	UMBD Columbia, MB (Linux system administrator)                                                        
+
+
+CERTIFICATIONS     
+Redhat Certified System Administrator (RHCSA)
+	Installation, configuration, and Hardening of Linux ser
