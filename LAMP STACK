@@ -1,0 +1,379 @@
+Skip to content
+PRADO 
+PRADO
+
+POSTED ONJUNE 9, 2019 BY VASILIJ DUŠKO
+How to install Apache, PHP 7.3 and MySQL on CentOS 7.6 (LAMP)
+This tutorial shows how to install an Apache web server on CentOS 7 server with PHP (mod_php) and MySQL database. The acronym LAMP is short for Linux, Apache, MySQL, PHP.
+
+This tutorial shows the installation of the latest PHP version 7.3 on CentOS 7.6
+
+Step 1: Preliminary Note
+In this tutorial, I use the hostname kvm1.prado.lt with the IP XX.XXX.XX.XXX. These settings might differ for you, so you have to replace them where appropriate.
+
+I will add the EPEL repo here to install latest phpMyAdmin as follows:
+
+rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*
+yum -y install epel-release
+To edit files on the shell, I’ll install the nano editor. If you prefer vi for file editing, then skip this step.
+
+yum update
+yum -y install nano
+Step 2: Installing MySQL / MariaDB
+MariaDB is a MySQL fork of the original MySQL developer Monty Widenius. MariaDB is compatible with MySQL and I’ve chosen to use MariaDB here instead of MySQL.
+
+First add MariaDB yum repository in our system. Create a new repo file /etc/yum.repos.d/mariadb.repo in your system and add below code as per your operating system and architecture.
+
+For CentOS/RHEL ~ 7
+
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.3/rhel7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+For CentOS/RHEL ~ 6
+
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.3/rhel6-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+Run this command to install MariaDB with yum:
+
+yum -y install mariadb-server mariadb
+Then we create the system startup links for MySQL (so that MySQL starts automatically whenever the system boots) and start the MySQL server:
+
+systemctl start mariadb.service
+systemctl enable mariadb.service
+Set passwords for the MySQL root account:
+
+mysql_secure_installation
+NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
+      SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!
+
+In order to log into MariaDB to secure it, we'll need the current
+password for the root user.  If you've just installed MariaDB, and
+you haven't set the root password yet, the password will be blank,
+so you should just press enter here.
+
+Enter current password for root (enter for none): 
+OK, successfully used password, moving on...
+
+Setting the root password ensures that nobody can log into the MariaDB
+root user without the proper authorisation.
+
+Set root password? [Y/n] y
+New password: 
+Re-enter new password: 
+Password updated successfully!
+Reloading privilege tables..
+ ... Success!
+
+
+By default, a MariaDB installation has an anonymous user, allowing anyone
+to log into MariaDB without having to have a user account created for
+them.  This is intended only for testing, and to make the installation
+go a bit smoother.  You should remove them before moving into a
+production environment.
+
+Remove anonymous users? [Y/n] y
+ ... Success!
+
+Normally, root should only be allowed to connect from 'localhost'.  This
+ensures that someone cannot guess at the root password from the network.
+
+Disallow root login remotely? [Y/n] n
+ ... skipping.
+
+By default, MariaDB comes with a database named 'test' that anyone can
+access.  This is also intended only for testing, and should be removed
+before moving into a production environment.
+
+Remove test database and access to it? [Y/n] y
+ - Dropping test database...
+ ... Success!
+ - Removing privileges on test database...
+ ... Success!
+
+Reloading the privilege tables will ensure that all changes made so far
+will take effect immediately.
+
+Reload privilege tables now? [Y/n] y
+ ... Success!
+
+Cleaning up...
+
+All done!  If you've completed all of the above steps, your MariaDB
+installation should now be secure.
+
+Thanks for using MariaDB!
+Step 3: Installing Apache
+CentOS 7 ships with Apache 2.4. The latest Apache version that existed when writing this tutorial is 2.4.6. Apache is directly available as a CentOS 7 package, therefore we can install it like this:
+
+yum -y install httpd
+Now configure your system to start Apache at boot time…
+
+systemctl start httpd.service
+systemctl enable httpd.service
+Now direct your browser to the IP address of your server, in my case http://XX.XXX.XX.XXX, and you should see the Apache placeholder page.
+
+Step 4: Installing PHP
+The PHP version that ships with CentOS as default is quite old (PHP 5.4.16). Therefore I will show you in this chapter some options to install newer PHP versions like PHP 7.3 from Remi repository.
+
+Add the Remi CentOS repository.
+
+rpm -Uvh http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+Install yum-utils as we need the yum-config-manager utility.
+
+yum -y install yum-utils
+and run yum update
+
+yum update
+Now you have to chose which PHP version you want to use on the server.
+
+Step 5: Install PHP 7.3
+If you want to use PHP 7.3 instead, use:
+
+yum-config-manager --enable remi-php73
+yum -y install php php-opcache
+In this example, I’ll use PHP 7.3.
+
+We must restart Apache to apply the changes:
+
+systemctl restart httpd.service
+Step 6: Testing PHP / getting details about your PHP Installation
+The document root of the default website is /var/www/html. We will create a small PHP file (php.php) in that directory and call it in a browser to test the PHP installation. The file will display lots of useful details about our PHP installation, such as the installed PHP version.
+
+nano /var/www/html/php.php
+<?php
+phpinfo();
+Now we call that file in a browser (e.g. http://89.40.15.151/php.php):
+
+As you see, PHP 7.3 is working, and it’s working through the Apache 2.0 Handler, as shown in the Server API line. If you scroll further down, you will see all modules that are already enabled in PHP. MySQL is not listed there which means we don’t have MySQL support in PHP yet.
+
+Step 7: Getting MySQL Support In PHP
+To get MySQL support in PHP, we can install the php-mysqlnd package. It’s a good idea to install some other PHP modules as well as you might need them for your applications. You can search for available PHP5 modules like this:
+
+yum search php
+Pick the ones you need and install them like this:
+
+yum -y install php-mysqlnd php-pdo
+In the next step I will install some common PHP modules that are required by CMS Systems like WordPress, Magento:
+
+yum -y install php-gd php-ldap php-odbc php-pear php-xml php-xmlrpc php-mbstring php-soap curl curl-devel
+Now restart Apache web server:
+
+systemctl restart httpd.service
+Now reload http://XX.XXX.XX.XXX/php.php in your browser and scroll down to the modules section again. You should now find lots of new modules like curl etc there.
+
+If you don’t need the php info output anymore, then delete that file for security reasons.
+
+rm /var/www/html/php.php
+Step 8: phpMyAdmin installation
+phpMyAdmin is a web interface through which you can manage your MySQL databases.
+phpMyAdmin can now be installed as follows:
+
+yum -y install phpMyAdmin
+Now restart Apache web server:
+
+systemctl restart httpd.service
+Now we configure phpMyAdmin. We change the Apache configuration so that phpMyAdmin allows connections not just from localhost (by commenting out the <RequireAny> stanza and adding the ‘Require all granted’ line):
+
+nano /etc/httpd/conf.d/phpMyAdmin.conf
+# phpMyAdmin - Web based MySQL browser written in php
+#
+# Allows only localhost by default
+#
+# But allowing phpMyAdmin to anyone other than localhost should be considered
+# dangerous unless properly secured by SSL
+
+Alias /phpMyAdmin /usr/share/phpMyAdmin
+Alias /phpmyadmin /usr/share/phpMyAdmin
+
+<Directory /usr/share/phpMyAdmin/>
+   AddDefaultCharset UTF-8
+
+   <IfModule mod_authz_core.c>
+     # Apache 2.4
+     <RequireAny>
+     #  Require ip 127.0.0.1
+     #  Require ip ::1
+     Require all granted
+     </RequireAny>
+   </IfModule>
+   <IfModule !mod_authz_core.c>
+     # Apache 2.2
+     Order Deny,Allow
+     Deny from All
+     Allow from 127.0.0.1
+     Allow from ::1
+   </IfModule>
+</Directory>
+
+<Directory /usr/share/phpMyAdmin/setup/>
+   <IfModule mod_authz_core.c>
+     # Apache 2.4
+     <RequireAny>
+     #  Require ip 127.0.0.1
+     #  Require ip ::1
+     Require all granted
+     </RequireAny>
+   </IfModule>
+   <IfModule !mod_authz_core.c>
+     # Apache 2.2
+     Order Deny,Allow
+     Deny from All
+     #Allow from 127.0.0.1
+     #Allow from ::1
+     Allow from all
+   </IfModule>
+</Directory>
+# These directories do not require access over HTTP - taken from the original
+# phpMyAdmin upstream tarball
+#
+<Directory /usr/share/phpMyAdmin/libraries/>
+    Order Deny,Allow
+    Deny from All
+    Allow from None
+</Directory>
+
+<Directory /usr/share/phpMyAdmin/setup/lib/>
+    Order Deny,Allow
+    Deny from All
+    Allow from None
+</Directory>
+
+<Directory /usr/share/phpMyAdmin/setup/frames/>
+    Order Deny,Allow
+    Deny from All
+    Allow from None
+</Directory>
+
+# This configuration prevents mod_security at phpMyAdmin directories from
+# filtering SQL etc.  This may break your mod_security implementation.
+#
+#<IfModule mod_security.c>
+#    <Directory /usr/share/phpMyAdmin/>
+#        SecRuleInheritance Off
+#    </Directory>
+#</IfModule>
+Next, we change the authentication in phpMyAdmin from cookie to http:
+
+nano /etc/phpMyAdmin/config.inc.php
+[...]
+$cfg['Servers'][$i]['auth_type']     = 'http';    // Authentication method (config, http or cookie based)?
+[...]
+Restart Apache:
+
+systemctl restart httpd.service
+Afterwards, you can access phpMyAdmin under http://XX.XXX.XX.XXX/phpmyadmin/.
+
+9 Links
+Apache: http://httpd.apache.org/
+PHP: http://www.php.net/
+MySQL: http://www.mysql.com/
+CentOS: http://www.centos.org/
+phpMyAdmin: http://www.phpmyadmin.net/
+
+TAGSAPACHE2, CENTOS, KVM, LAMP, LINUX, MARIADB, MYSQL, PHP
+Leave a Reply
+Your email address will not be published. Required fields are marked *
+
+Comment
+
+Name *
+
+Email *
+
+Post navigation
+Previous Post
+PREVIOUS
+How to set up master slave replication in MySQLNext Post
+NEXT
+How to install WordPress, Linux, Nginx, MariaDB 10.3, PHP 7.3 (LEMP stack) on CentOS 7
+Search for:
+Search …
+Search
+RECENT POSTS
+How to install Jenkins on Ubuntu 18.04
+December 27, 2019
+How to upgrade 18.04/19.04 to Ubuntu 19.10
+December 25, 2019
+Installing VMware on 20.04: Failed to build vmmon
+December 24, 2019
+How to upgrade CentOS 7 to CentOS 8
+December 14, 2019
+How to install WordPress, Linux, Nginx, MariaDB 10.4, PHP 7.4 (LEMP stack) on CentOS 8
+December 12, 2019
+TAGS
+Apache2
+Bugs
+CentOS
+Change log
+CVE
+DataStorage
+Debian
+dedikuoti.lt
+Degraded array
+DirectAdmin
+docker
+docker-compose
+Dotdeb
+Fail2Ban
+GPG
+GRUB
+Hostinger
+HTTP/2
+Kaspersky Internet Security
+Kaspersky Lab
+Kaspersky Total Security
+KVM
+KVM Linux servers
+LAMP
+Linux
+LVM
+MariaDB
+mdadm
+mod_php
+MySQL
+Nginx
+OpenLiteSpeed
+ownCloud
+PHP
+Proxmox
+Python
+Query Strings
+Security
+SSL
+Ubuntu
+vmmon
+VMWare
+Wordpress
+Yubikey
+yum
+ARCHIVES
+December 2019
+November 2019
+October 2019
+September 2019
+August 2019
+July 2019
+June 2019
+May 2019
+April 2019
+March 2019
+January 2019
+December 2018
+November 2018
+October 2018
+September 2018
+July 2018
+June 2018
+May 2018
+April 2018
+March 2018
+February 2018
+POPADS.NET
+Hostinger.lt Hostingas Serveriai.lt Svetainių kūrimas Dizaineriai.lt Profesionalus Hostingas.lt Dedikuoti.lt serveriai Sertifikatai.lt SSL
+Proudly powered by WordPress
+We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it.I agreeNoRead more
