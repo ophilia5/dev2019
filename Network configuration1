@@ -1,0 +1,26 @@
+After installing CentOS you will wan’t to configure IP address. CentOS is mostly used as Server. So you will want to give it a static IP address. By default CentOS interface is configured to receive IP from DHCP server. Here I will show you how to configure static IP address in CentOS system.
+
+Configure Static IP Address in CentOS
+The following steps will show configuration of static IP address in CentOS machine.
+
+Files needed for network configuration are under /etc/sysconfig/network-scripts. So open the file with editor like nano or vi. Here I will use nano editor. After you start your server running CentOS enter root user credentials and get in. Type the command,
+# nano /etc/sysconfig/network-scripts/ifcfg-eth0
+You will see default configuration like this,
+Configure Static IP Address in CentOS
+Now change the configuration to this,IP Address Changed
+Then save the file, to save press ctrl+x to exit and press y for confirmation.
+Now restart the network services by issuing the command,
+[root@hostname~]# service network restart
+To verify the IP address issue the following command,
+[root@hostname~]# ifconfig
+You will then see following information,Configure Static IP Address in CentOS
+After configuring IP address now let’s configure DNS. Name server or DNS information is stored in different file. The location is, /etc/recolv.conf. Again using nano editor to configure DNS information,
+[root@hostname~]# nano /etc/resolv.conf
+By default, this file is empty, so enter at least one entry here,
+nameserver 4.2.2.2
+The name server IP address can be different depending on your network scenario. I will use www.google.com. Now save the file and exit. You can test the configuration by issuing ping command.
+
+[root@hostname~]# ping www.google.com
+If you get the reply, you have successfully configured the IP address and DNS information.
+
+Ping Reply
