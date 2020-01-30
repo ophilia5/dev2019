@@ -1,0 +1,170 @@
+Static IP Configuration on CentOS 6
+Find answers to frequently asked questions here.
+Support Networking Static IP Configuration on CentOS 6
+ Estimated reading time: 2 min
+Introduction
+There are two methods to assign network configuration to a device on the net. DHCP or static assignment. DHCP is normally set as default. Static configurations usually need IP addresses as well as DNS resolvers plus routing. In this tutorial, I will cover Linux static configuration on CentOS 6.
+
+Prerequisites
+A shell editor like vi, nano or joe. We personally prefer vi.
+A Cloud VPS or Dedicated Server with CentOS 6 installation.
+Step 1: Backup and Apply changes
+The first step is to make a backup of your original file and then make the changes.
+
+< id="docs-internal-guid-deea88ad-b7b1-f166-60cf-0e3775e92120">mv  /etc/sysconfig/network-scripts/ifcfg-eth0  /etc/sysconfig/network-scripts/ifcfg-eth0.bak
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+You can make changes like:
+
+#My IP description
+# IPv-4 DEVICE="eth0"
+NM_CONTROLLED="yes"
+ONBOOT=yes
+HWADDR=20:89:84:c8:12:8a
+TYPE=Ethernet
+BOOTPROTO=static
+NAME="System eth0"
+UUID=5fb06bd0-0bb0-7ffb-45f1-d6edd65f3e03
+IPADDR= 2001:db8::c0ca:1eaf
+NETMASK=255.255.255.0
+Note: Only two lines need to be changed, IPADDR and NETMASK. For IPv6 the following entries need to be added:
+
+vi /etc/sysconfig/network
+[...]
+NETWORKING_IPV6=yes vi /etc/sysconfig/network-scripts/ifcfg-eth0
+[...]
+#IPv-6
+IPV6INIT=yes
+IPV6ADDR=2001:db8::c0ca:1eaf
+IPV6_DEFAULTGW=2001:db8::1ead:ed:beef
+Step 2: configuring DNS
+We are going to use the following file to add the DNS /etc/resolv.conf
+
+vi /etc/resolv.conf
+[...]
+PrefferredDNS 89.207.128.252
+AlternateDNS 89.207.130.252
+Additional nameserver lines can be added in case the first is not reachable.
+
+Step 3: Editing your hostname
+My hostname is myserver.sample.com You need to edit /etc/hosts file:
+
+vi /etc/hosts
+127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4
+192.168.0.100 myserver.sample.com myserver ::1 localhost localhost.localdomain localhost6 localhost6.localdomain6
+and the resolv.conf file:
+
+vi /etc/resolv.conf
+NETWORKING=yes
+HOSTNAME= myserver.sample.com GATEWAY=192.168.0.1
+[...]
+Step 4: Rebooting the server
+To reboot the server:
+
+reboot
+Step 5: Checking the hostname
+If you want to check the hostname after the reboot, you use this command:
+
+hostname
+If you want to have multiple IP addresses by creating an alias for eth0:0, create the following file:
+
+vi /etc/sysconfig/network-scripts/ifcfg-eth0:0
+#IP Aliasing DEVICE="eth0:0"
+BOOTPROTO="static"
+HWADDR=20:89:84:c8:12:8a
+NM_CONTROLLED="no"
+ONBOOT="yes"
+TYPE="Ethernet"
+IPADDR=192.168.0.109 NETMASK=255.255.255.0
+GATEWAY=192.168.0.1
+DNS1=8.8.8.8
+DNS1=8.8.4.4
+You should use your own IP. We have used 192.168.0.109 for IP aliasing. Restart the network services by this command:
+
+/etc/init.d/network restart
+You need to check all the changes that you have made:
+
+ifconfig
+The output should be similar to:
+
+root@myserver:~# ifconfig
+eth0 Link encap:Ethernet HWaddr 20:89:84:c8:12:8a
+inet addr:192.168.0.100 Bcast:192.168.0.255 Mask:255.255.255.0
+inet6 addr: 2001:db8::c0ca:1eaf/64 Scope:Link
+UP BROADCAST RUNNING MULTICAST MTU:1500 Metric:1
+RX packets:200197 errors:0 dropped:67 overruns:0 frame:0
+TX packets:69689 errors:0 dropped:0 overruns:0 carrier:0
+collisions:0 txqueuelen:1000
+RX bytes:64103748 (64.1 MB) TX bytes:14106191 (14.1 MB) eth0:0 Link encap:Ethernet HWaddr 20:89:84:c8:12:8a
+inet addr:192.168.0.109 Bcast:192.168.0.255 Mask:255.255.255.0
+UP BROADCAST RUNNING MULTICAST MTU:1500 Metric:1
+lo Link encap:Local Loopback
+inet addr:127.0.0.1 Mask:255.0.0.0
+inet6 addr: ::1/128 Scope:Host
+UP LOOPBACK RUNNING MTU:65536 Metric:1
+RX packets:10365 errors:0 dropped:0 overruns:0 frame:0
+TX packets:10365 errors:0 dropped:0 overruns:0 carrier:0
+collisions:0 txqueuelen:0
+RX bytes:875114 (875.1 KB) TX bytes:875114 (875.1 KB)
+Conclusion
+Congratulations, you have successfully configured static IP on CentOS 6.
+
+Was this article helpful?
+ Like 10  Dislike 0
+Views: 4666
+Reader Interactions
+Leave a Reply
+Your email address will not be published. Required fields are marked *
+
+Comment
+
+Name *
+
+Email *
+
+snel.com-bee-cloudvps-kb
+Deploy your Cloud VPS
+within 2 minutes
+Become a Snel.com customer today
+Get started
+We're here
+ Start a Live Chat
+ Email us
+ +31 88 3 088 099 
+Footer
+Our Products
+Snel Workspace
+Cloud VPS
+Managed Cloud VPS
+Dedicated Servers
+Managed Dedicated Servers
+Managed Server Plans
+Budget Dedicated Servers
+Add on Solutions
+About Us
+Our Story
+Contact Us
+Reviews
+Become a Reseller
+Data Center
+Network
+Snel NOC
+Payment Methods
+Legal
+EU GDPR
+Service Level Agreement
+Disclaimer
+Privacy Statement
+Terms and Conditions
+Data Processing Agreement
+Acceptable Usage Policy
+Blog
+Redesigned client area release
+Snel.com Interview with WebsitePlanet
+This is why we are leaving OnApp
+Show us some love
+Bitcoin Payments Accepted Coin Payments Merchant
+Stay Updated
+youremail@address.com
+Copyright © 2020 Snel.com B.V. All Rights Reserved.
+
+This website uses cookies to improve the experience of our visitors. Read moreOk, do not show again
